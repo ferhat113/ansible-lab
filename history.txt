@@ -1,0 +1,29 @@
+echo "generating ssh keys ..."
+ssh-keygen -t rsa -b 4096 -C "for ansible"
+sleep 10
+echo password > password.txt
+echo "updating the system ..."
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install sshpass -y
+sleep 5
+
+cat > script.sh << 'EOF'
+#!/bin/bash
+
+for user in ansible root
+do
+  for os in ubuntu centos
+  do
+    for instance in 1 2 3
+    do
+      echo "Copying SSH key to ${user}@${os}${instance}..."
+      sshpass -f password.txt ssh-copy-id -o StrictHostKeyChecking=no ${user}@${os}${instance}
+    done
+  done
+done
+EOF
+
+chmod +x script.sh 
+./script.sh 
+ansible all -i,ubuntu1,ubuntu2,ubuntu3,centos1,centos2,centos3 -m ping
