@@ -4,7 +4,7 @@ sleep 10
 echo password > password.txt
 echo "updating the system ..."
 sudo apt update -y
-sudo apt upgrade -y
+#sudo apt upgrade -y
 sudo apt install sshpass -y
 sleep 5
 
