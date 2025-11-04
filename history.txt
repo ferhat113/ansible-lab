@@ -1,11 +1,12 @@
 echo "generating ssh keys ..."
-ssh-keygen -t rsa -b 4096 -C "for ansible"
+ssh-keygen -t rsa -b 4096 -C "for ansible" -N "" -f ~/.ssh/id_rsa
 sleep 10
-echo password > password.txt
+
+echo "password" > password.txt
 echo "updating the system ..."
-sudo apt update -y
-#sudo apt upgrade -y
-sudo apt install sshpass -y
+echo "password" | sudo -S apt update -y
+#echo "password" | sudo -S apt upgrade -y
+echo "password" | sudo -S apt install sshpass -y
 sleep 5
 
 cat > script.sh << 'EOF'
@@ -26,4 +27,8 @@ EOF
 
 chmod +x script.sh 
 ./script.sh 
-ansible all -i,ubuntu1,ubuntu2,ubuntu3,centos1,centos2,centos3 -m ping
+
+ansible all -i ubuntu1,ubuntu2,ubuntu3,centos1,centos2,centos3 -m ping
+
+echo "modifying port on centos1"
+ssh root@centos1 "/utils/update_sshd_ports.sh 2222"
