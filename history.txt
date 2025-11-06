@@ -33,6 +33,10 @@ ssh root@centos1 "sed -i '/^# %wheel.*NOPASSWD: ALL/a ansible ALL=(ALL) NOPASSWD
 ssh root@centos2 "sed -i '/^# %wheel.*NOPASSWD: ALL/a ansible ALL=(ALL) NOPASSWD: ALL' /etc/sudoers"
 ssh root@centos3 "sed -i '/^# %wheel.*NOPASSWD: ALL/a ansible ALL=(ALL) NOPASSWD: ALL' /etc/sudoers"
 
+ssh root@ubuntu1'echo "ansible ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ansible && chmod 0440 /etc/sudoers.d/ansible'
+ssh root@ubuntu2 'echo "ansible ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ansible && chmod 0440 /etc/sudoers.d/ansible'
+ssh root@ubuntu3 'echo "ansible ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ansible && chmod 0440 /etc/sudoers.d/ansible'
+
 echo "pinging all available hosts..."
 ansible all -i ubuntu1,ubuntu2,ubuntu3,centos1,centos2,centos3 -m ping
 
