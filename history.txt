@@ -27,6 +27,12 @@ EOF
 chmod +x script.sh 
 ./script.sh 
 
+echo "modifying remote sudoers file.."
+
+ssh root@centos1 "sed -i '/^# %wheel.*NOPASSWD: ALL/a ansible ALL=(ALL) NOPASSWD: ALL' /etc/sudoers"
+ssh root@centos2 "sed -i '/^# %wheel.*NOPASSWD: ALL/a ansible ALL=(ALL) NOPASSWD: ALL' /etc/sudoers"
+ssh root@centos3 "sed -i '/^# %wheel.*NOPASSWD: ALL/a ansible ALL=(ALL) NOPASSWD: ALL' /etc/sudoers"
+
 echo "pinging all available hosts..."
 ansible all -i ubuntu1,ubuntu2,ubuntu3,centos1,centos2,centos3 -m ping
 
